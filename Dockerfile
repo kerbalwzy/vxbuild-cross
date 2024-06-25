@@ -84,7 +84,7 @@ RUN gzip -dc "${OSX_CROSS_PATH}/tarballs/libtool-${LIBTOOL_VERSION}.tar.gz" | ta
 # Making the final image with goreleaser and osxcross
 FROM --platform=linux/arm64/v8 osx-cross-base AS final-arm64
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -qq && apt-get install -y -q --no-install-recommends \
+RUN apt-get update -qq && apt-get install -y -q --no-install-recommends --fix-missing \
     libltdl-dev \
     gcc-multilib-i686-linux-gnu \
     g++-multilib-i686-linux-gnu \
@@ -92,19 +92,29 @@ RUN apt-get update -qq && apt-get install -y -q --no-install-recommends \
     g++-multilib-x86-64-linux-gnu \
     gcc-mingw-w64 \
     g++-mingw-w64 \
+    gcc-arm-linux-gnueabihf \ 
+    g++-arm-linux-gnueabihf \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
     parallel \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 FROM --platform=linux/amd64 osx-cross-base AS final-amd64
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -qq && apt-get install -y -q --no-install-recommends \
+RUN apt-get update -qq && apt-get install -y -q --no-install-recommends --fix-missing \
     libltdl-dev \
     gcc-multilib \
     g++-multilib \
     gcc-mingw-w64 \
     g++-mingw-w64 \
+    gcc-arm-linux-gnueabihf \ 
+    g++-arm-linux-gnueabihf \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
     parallel \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ 
 
 ###################
 # multiarch build stage
